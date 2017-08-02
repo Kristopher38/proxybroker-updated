@@ -35,7 +35,7 @@ class ProxyPool:
 			log.info("Choosen proxy (imported) in get")
 		return chosen
 
-	def _update(self):
+	async def _update(self):
 		log.info("Trying to pull all proxies from queue")
 		while True:
 			proxy = await self._proxies.get()
@@ -45,7 +45,7 @@ class ProxyPool:
 		
 	async def _import(self, expected_scheme):
 		log.info("Trying to import proxy")
-		self._update()
+		await self._update()
 		while True:
 			proxy = await self._proxies.get()
 			self._proxies.task_done()
