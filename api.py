@@ -348,7 +348,7 @@ class Broker:
         self._all_tasks.append(task)
 
     def _push_to_result(self, proxy):
-        log.debug('push to result: %r' % proxy)
+        log.info('push to result: %r' % proxy)
         self._proxies.put_nowait(proxy)
         self._update_limit()
 
