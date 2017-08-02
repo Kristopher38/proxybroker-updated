@@ -23,16 +23,20 @@ class ProxyPool:
         self._max_resp_time = max_resp_time
 
     async def get(self, scheme):
+		log.info("Getting proxy")
         for priority, proxy in self._pool:
             if scheme in proxy.schemes:
                 chosen = proxy
                 self._pool.remove((proxy.priority, proxy))
+				log.info("Choosen proxy (standard way) in get is %s:%d", (proxy.host, proxy.port))
                 break
         else:
             chosen = await self._import(scheme)
+			log.info("Choosen proxy (imported) in get is %s:%d", (proxy.host, proxy.port))
         return chosen
 
     async def _import(self, expected_scheme):
+		log.info("Trying to import proxy")
         while True:
             proxy = await self._proxies.get()
             self._proxies.task_done()
@@ -41,16 +45,18 @@ class ProxyPool:
             elif expected_scheme not in proxy.schemes:
                 self.put(proxy)
             else:
+				log.info("Returning proxy %s:%d from _import" % (proxy.host, proxy.port))
                 return proxy
 
     def put(self, proxy):
         if (proxy.stat['requests'] >= self._min_req_proxy and
             ((proxy.error_rate > self._max_error_rate) or
              (proxy.avg_resp_time > self._max_resp_time))):
-            log.debug('%s:%d removed from proxy pool' % (proxy.host, proxy.port))
+            log.info('%s:%d removed from proxy pool' % (proxy.host, proxy.port))
         else:
+			log.info("Putting proxy %s:%d in the pool" % (proxy.host, proxy.port))
             heapq.heappush(self._pool, (proxy.priority, proxy))
-        log.debug('%s:%d stat: %s' % (proxy.host, proxy.port, proxy.stat))
+        log.info('%s:%d stat: %s' % (proxy.host, proxy.port, proxy.stat))
 
 
 class Server:
