@@ -28,7 +28,7 @@ class ProxyPool:
 			if scheme in proxy.schemes:
 				chosen = proxy
 				self._pool.remove((proxy.priority, proxy))
-				log.info("Choosen proxy (standard way) in get is %s:%d", (proxy.host, proxy.port))
+				log.info("Choosen proxy (standard way) in get is %s:%d" % (proxy.host, proxy.port))
 				break
 		else:
 			chosen = await self._import(scheme)
