@@ -35,17 +35,21 @@ class ProxyPool:
 			log.info("Choosen proxy (imported) in get")
 		return chosen
 
-	async def _update(self):
+	def _update(self):
 		log.info("Trying to pull all proxies from queue")
 		while True:
-			proxy = await self._proxies.get()
-			self._proxies.task_done()
-			self.put(proxy)
-			log.info("Pulled proxy %s:%d from queue" % (proxy.host, proxy.port))
+			try:
+				proxy = self._proxies.get_nowait()
+				self._proxies.task_done()
+				self.put(proxy)
+				log.info("Pulled proxy %s:%d from queue" % (proxy.host, proxy.port))
+			except asyncio.QueueEmpty:
+				log.info("Emptied the whole queue, returning from _update...")
+				return
 		
 	async def _import(self, expected_scheme):
 		log.info("Trying to import proxy")
-		await self._update()
+		self._update()
 		while True:
 			proxy = await self._proxies.get()
 			self._proxies.task_done()
