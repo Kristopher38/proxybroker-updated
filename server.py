@@ -32,7 +32,7 @@ class ProxyPool:
 				break
 		else:
 			chosen = await self._import(scheme)
-			#log.info("Choosen proxy (imported) in get is %s:%d", (proxy.host, proxy.port))
+			log.info("Choosen proxy (imported) in get")
 		return chosen
 
 	async def _import(self, expected_scheme):
