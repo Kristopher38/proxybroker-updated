@@ -24,6 +24,7 @@ class ProxyPool:
 
 	async def get(self, scheme):
 		log.info("Getting proxy")
+		self._update()
 		for priority, proxy in self._pool:
 			if scheme in proxy.schemes:
 				chosen = proxy
@@ -49,7 +50,6 @@ class ProxyPool:
 		
 	async def _import(self, expected_scheme):
 		log.info("Trying to import proxy")
-		self._update()
 		while True:
 			proxy = await self._proxies.get()
 			self._proxies.task_done()
