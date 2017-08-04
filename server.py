@@ -27,6 +27,7 @@ class ProxyPool:
 		log.info("Getting proxy")
 		self._update()
 		
+		log.info("_pool length: %d" % (len(self._pool),))
 		random_pool = self._pool
 		while len(random_pool) > 0:
 			proxy = random.choice(random_pool)
