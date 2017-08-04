@@ -24,7 +24,7 @@ class ProxyPool:
 		self._max_resp_time = max_resp_time
 
 	async def get(self, scheme):
-		log.info("Getting proxy")
+		#log.info("Getting proxy")
 		self._update()
 		
 		random_pool = self._pool
@@ -33,11 +33,11 @@ class ProxyPool:
 			if scheme in proxy.schemes:
 				chosen = proxy
 				self._pool.remove((proxy.priority, proxy))
-				log.info("Chosen proxy (random) in get is %s:%d" % (proxy.host, proxy.port))
+				#log.info("Chosen proxy (random) in get is %s:%d" % (proxy.host, proxy.port))
 				break
 			else:
 				random_pool.remove((proxy.priority, proxy))
-				log.info("Removed proxy from random pool (schema %s not as required)" % (proxy.schemes,))
+				#log.info("Removed proxy from random pool (schema %s not as required)" % (proxy.schemes,))
 		# for priority, proxy in self._pool:
 			# if scheme in proxy.schemes:
 				# chosen = proxy
@@ -46,7 +46,7 @@ class ProxyPool:
 				# break
 		else:
 			chosen = await self._import(scheme)
-			log.info("Choosen proxy (imported) in get")
+			#log.info("Choosen proxy (imported) in get")
 		return chosen
 
 	def _update(self):
@@ -62,7 +62,7 @@ class ProxyPool:
 				return
 		
 	async def _import(self, expected_scheme):
-		log.info("Trying to import proxy")
+		#log.info("Trying to import proxy")
 		while True:
 			proxy = await self._proxies.get()
 			self._proxies.task_done()
@@ -71,7 +71,7 @@ class ProxyPool:
 			elif expected_scheme not in proxy.schemes:
 				self.put(proxy)
 			else:
-				log.info("Returning proxy %s:%d from _import" % (proxy.host, proxy.port))
+				#log.info("Returning proxy %s:%d from _import" % (proxy.host, proxy.port))
 				return proxy
 
 	def put(self, proxy):
