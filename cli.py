@@ -273,13 +273,13 @@ def cli(args=sys.argv[1:]):
 		format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
 		datefmt='[%H:%M:%S]', level=ns.log)
 	logging.getLogger('asyncio').setLevel(ns.log)
-	AbstractEventLoop.set_debug()
 
 	if hasattr(ns, 'anon_lvl') and 'HTTP' in ns.types:
 		ns.types.remove('HTTP')
 		ns.types.append(('HTTP', ns.anon_lvl))
 
 	loop = asyncio.get_event_loop()
+	loop.set_debug()
 	proxies = asyncio.Queue(loop=loop)
 	broker = Broker(
 		proxies, max_conn=ns.max_conn, max_tries=ns.max_tries,
