@@ -272,7 +272,6 @@ def cli(args=sys.argv[1:]):
 	logging.basicConfig(
 		format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
 		datefmt='[%H:%M:%S]', level=ns.log)
-	logging.getLogger('asyncio').setLevel(ns.log)
 
 	if hasattr(ns, 'anon_lvl') and 'HTTP' in ns.types:
 		ns.types.remove('HTTP')
