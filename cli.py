@@ -273,6 +273,7 @@ def cli(args=sys.argv[1:]):
 		format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
 		datefmt='[%H:%M:%S]', level=ns.log)
 	logging.getLogger('asyncio').setLevel(ns.log)
+	AbstractEventLoop.set_debug()
 
 	if hasattr(ns, 'anon_lvl') and 'HTTP' in ns.types:
 		ns.types.remove('HTTP')
