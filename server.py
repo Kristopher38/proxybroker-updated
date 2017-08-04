@@ -50,15 +50,15 @@ class ProxyPool:
 		return chosen
 
 	def _update(self):
-		log.info("Trying to pull all proxies from queue")
+		#log.info("Trying to pull all proxies from queue")
 		while True:
 			try:
 				proxy = self._proxies.get_nowait()
 				self._proxies.task_done()
 				self.put(proxy)
-				log.info("Pulled proxy %s:%d from queue" % (proxy.host, proxy.port))
+				#log.info("Pulled proxy %s:%d from queue" % (proxy.host, proxy.port))
 			except asyncio.QueueEmpty:
-				log.info("Emptied the whole queue, returning from _update...")
+				#log.info("Emptied the whole queue, returning from _update...")
 				return
 		
 	async def _import(self, expected_scheme):
@@ -78,11 +78,11 @@ class ProxyPool:
 		if (proxy.stat['requests'] >= self._min_req_proxy and
 			((proxy.error_rate > self._max_error_rate) or
 			(proxy.avg_resp_time > self._max_resp_time))):
-			log.info('%s:%d removed from proxy pool' % (proxy.host, proxy.port))
+			#log.info('%s:%d removed from proxy pool' % (proxy.host, proxy.port))
 		else:
-			log.info("Putting proxy %s:%d in the pool" % (proxy.host, proxy.port))
+			#log.info("Putting proxy %s:%d in the pool" % (proxy.host, proxy.port))
 			heapq.heappush(self._pool, (proxy.priority, proxy))
-		log.info('%s:%d stat: %s' % (proxy.host, proxy.port, proxy.stat))
+		#log.info('%s:%d stat: %s' % (proxy.host, proxy.port, proxy.stat))
 
 
 class Server:
