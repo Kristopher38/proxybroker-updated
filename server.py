@@ -33,6 +33,7 @@ class ProxyPool:
 			log.info("test")
 			proxy = self._pool[0]
 			if scheme in proxy.schemes:
+				log.info("test2")
 				chosen = proxy
 				self._pool.remove((proxy.priority, proxy))
 				log.info("Chosen proxy (random) in get is %s:%d" % (proxy.host, proxy.port))
