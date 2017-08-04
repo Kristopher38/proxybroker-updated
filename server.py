@@ -30,6 +30,7 @@ class ProxyPool:
 		log.info("_pool length: %d" % (len(self._pool),))
 		random_pool = self._pool
 		while len(random_pool) > 0:
+			log.info("test")
 			proxy = self._pool[0]
 			if scheme in proxy.schemes:
 				chosen = proxy
