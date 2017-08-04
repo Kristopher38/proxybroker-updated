@@ -22,7 +22,7 @@ def main():
 
     judges = ['http://httpbin.org/get?show_env',
               'https://httpbin.org/get?show_env']
-    providers = ['http://www.proxylists.net/', 'http://fineproxy.org/eng/']
+    providers = ['http://www.proxylists.net/', 'https://free-proxy-list.net/']
 
     broker = Broker(
         proxies, timeout=8, max_conn=200, max_tries=3, verify_ssl=False,
