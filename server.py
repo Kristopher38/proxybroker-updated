@@ -24,29 +24,29 @@ class ProxyPool:
 		self._max_resp_time = max_resp_time
 
 	async def get(self, scheme):
-		#log.info("Getting proxy")
+		log.info("Getting proxy")
 		self._update()
 		
-		# random_pool = self._pool
-		# while len(random_pool) > 0:
-			# proxy = random.choice(random_pool)
-			# if scheme in proxy.schemes:
-				# chosen = proxy
-				# self._pool.remove((proxy.priority, proxy))
-				#log.info("Chosen proxy (random) in get is %s:%d" % (proxy.host, proxy.port))
-				# break
-			# else:
-				# random_pool.remove((proxy.priority, proxy))
-				# log.info("Removed proxy from random pool (schema %s not as required)" % (proxy.schemes,))
-		for priority, proxy in self._pool:
+		random_pool = self._pool
+		while len(random_pool) > 0:
+			proxy = random.choice(random_pool)
 			if scheme in proxy.schemes:
 				chosen = proxy
 				self._pool.remove((proxy.priority, proxy))
-				log.info("Choosen proxy (standard way) in get is %s:%d" % (proxy.host, proxy.port))
+				log.info("Chosen proxy (random) in get is %s:%d" % (proxy.host, proxy.port))
 				break
+			else:
+				random_pool.remove((proxy.priority, proxy))
+				log.info("Removed proxy from random pool (schema %s not as required)" % (proxy.schemes,))
+		# for priority, proxy in self._pool:
+			# if scheme in proxy.schemes:
+				# chosen = proxy
+				# self._pool.remove((proxy.priority, proxy))
+				# log.info("Choosen proxy (standard way) in get is %s:%d" % (proxy.host, proxy.port))
+				# break
 		else:
 			chosen = await self._import(scheme)
-			log.info("Choosen proxy (imported) in get")
+			#log.info("Choosen proxy (imported) in get")
 		return chosen
 
 	def _update(self):
