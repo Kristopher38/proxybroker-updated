@@ -279,7 +279,6 @@ def cli(args=sys.argv[1:]):
 		ns.types.append(('HTTP', ns.anon_lvl))
 
 	loop = asyncio.get_event_loop()
-	loop.set_debug(True)
 	proxies = asyncio.Queue(loop=loop)
 	broker = Broker(
 		proxies, max_conn=ns.max_conn, max_tries=ns.max_tries,
