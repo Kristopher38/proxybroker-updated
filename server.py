@@ -78,10 +78,10 @@ class ProxyPool:
 		if (proxy.stat['requests'] >= self._min_req_proxy and
 			((proxy.error_rate > self._max_error_rate) or
 			(proxy.avg_resp_time > self._max_resp_time))):
-			#log.info('%s:%d removed from proxy pool' % (proxy.host, proxy.port))
+			log.info('%s:%d removed from proxy pool' % (proxy.host, proxy.port))
 		else:
-			heapq.heappush(self._pool, (proxy.priority, proxy))
 			#log.info("Putting proxy %s:%d in the pool" % (proxy.host, proxy.port))
+			heapq.heappush(self._pool, (proxy.priority, proxy))
 		#log.info('%s:%d stat: %s' % (proxy.host, proxy.port, proxy.stat))
 
 
