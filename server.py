@@ -151,20 +151,20 @@ class Server:
 		self._connections[f] = (client_reader, client_writer)
 
 	async def _handle(self, client_reader, client_writer):
-		log.debug('Accepted connection from %s' % (
+		log.info('Accepted connection from %s' % (
 				client_writer.get_extra_info('peername'),))
 
 		request, headers = await self._parse_request(client_reader)
 		scheme = self._identify_scheme(headers)
 		client = id(client_reader)
-		log.debug('client: %d; request: %s; headers: %s; scheme: %s' % (
-				client, request, headers, scheme))
+		log.info('client: %d; request: %s; scheme: %s' % (
+				client, request, scheme))
 
 		for attempt in range(self._max_tries):
 			stime, err = 0, None
 			proxy = await self._proxy_pool.get(scheme)
 			proto = self._choice_proto(proxy, scheme)
-			log.debug('client: %d; attempt: %d; proxy: %s; proto: %s' % (
+			log.info('client: %d; attempt: %d; proxy: %s; proto: %s' % (
 					client, attempt, proxy, proto))
 			try:
 				await proxy.connect()
@@ -195,15 +195,15 @@ class Server:
 						scheme=scheme))]
 				await asyncio.gather(*stream, loop=self._loop)
 			except asyncio.CancelledError:
-				log.debug('Cancelled in server._handle')
+				log.info('Cancelled in server._handle')
 				break
 			except (ProxyTimeoutError, ProxyConnError, ProxyRecvError,
 					ProxySendError, ProxyEmptyRecvError, BadStatusError,
 					BadResponseError) as e:
-				log.debug('client: %d; error: %r' % (client, e))
+				log.info('client: %d; error: %r' % (client, e))
 				continue
 			except ErrorOnStream as e:
-				log.debug('client: %d; error: %r; EOF: %s' % (
+				log.info('client: %d; error: %r; EOF: %s' % (
 						client, e, client_reader.at_eof()))
 				for task in stream:
 					if not task.done():
